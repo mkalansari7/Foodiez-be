@@ -3,6 +3,7 @@ const cors = require("cors");
 //
 const categoryRoute = require("./api/category/route");
 const recipeRoute = require("./api/recipe/route");
+const ingredientRoute = require("./api/ingredient/route");
 //
 const dotenv = require("dotenv");
 const connectDB = require("./database");
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 //routes
 app.use("/api/category", categoryRoute);
 app.use("/api/recipe", recipeRoute);
+app.use("/api/ingredient", ingredientRoute);
 
 // Error handiling
 app.use((err, req, res, next) => {

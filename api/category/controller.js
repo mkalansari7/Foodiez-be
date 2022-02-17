@@ -1,4 +1,5 @@
 const Category = require("../../models/Category");
+const Recipe = require("../../models/Recipe");
 
 exports.fetchCategory = async (categoryId, next) => {
   try {
@@ -17,7 +18,10 @@ exports.fetchCategory = async (categoryId, next) => {
 
 exports.getCategories = async (req, res, next) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.find().populate({
+      path: "recipes",
+      select: ["name"],
+    });
     return res.json(categories);
   } catch (error) {
     next(error);
@@ -32,6 +36,7 @@ exports.addCategory = async (req, res, next) => {
       }/${req.file.path}`;
     }
 
+    req.body.recipe = req.recipe._id;
     const newCategory = await Category.create(req.body);
     res.status(201).json(newCategory);
   } catch (error) {
