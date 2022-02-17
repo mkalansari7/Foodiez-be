@@ -50,3 +50,18 @@ exports.updateIngredient = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.addIngredient = async (req, res, next) => {
+  try {
+    if (req.file) {
+      req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
+        req.originalUrl
+      }/${req.file.path}`;
+    }
+    const newIngredient = await Ingredient.create(req.body);
+
+    res.status(201).json(newIngredient);
+  } catch (error) {
+    next(error);
+  }
+};

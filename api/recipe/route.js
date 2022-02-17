@@ -5,7 +5,6 @@ const {
   deleteRecipe,
   fetchRecipe,
   updateRecipe,
-  addIngredient,
 } = require("./controller");
 
 const router = express.Router();
@@ -25,6 +24,6 @@ router.param("recipeId", async (req, res, next, recipeId) => {
 router.get("/", upload.single("image"), getRecipes);
 router.delete("/:recipeId", deleteRecipe);
 router.put("/:recipeId", upload.single("image"), updateRecipe);
-router.post("/:recipeId/ingredient", upload.single("image"), addIngredient);
+// router.post("/:recipeId/ingredient", upload.single("image"), addIngredient);
 
 module.exports = router;
