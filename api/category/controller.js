@@ -69,10 +69,8 @@ exports.updateCaregory = async (req, res, next) => {
 
 exports.addRecipe = async (req, res, next) => {
   try {
-    if (req.files) {
+    if (req.file) {
       req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
-
-      images = req.files;
     }
     req.body.category = req.category._id;
 
