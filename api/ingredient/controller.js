@@ -17,7 +17,10 @@ exports.fetchIngredient = async (ingredientId, next) => {
 
 exports.getIngredients = async (req, res, next) => {
   try {
-    const ingredient = await Ingredient.find();
+    const ingredient = await Ingredient.find().populate({
+      path: "recipes",
+      select: ["name"],
+    });
     return res.json(ingredient);
   } catch (error) {
     next(error);
