@@ -22,9 +22,8 @@ router.param("ingredientId", async (req, res, next, ingredientId) => {
   }
 });
 
-router.get("/", upload.single("image"), getIngredients);
-router.post("/", upload.single("image"), addIngredient);
-
-router.delete("/:ingredientId", deleteIngredient);
-router.put("/:ingredientId", upload.single("image"), updateIngredient);
+router.get("/", getIngredients); // get all ing
+router.post("/", upload.single("image"), addIngredient); // add new ing
+router.delete("/:ingredientId", deleteIngredient); // delete an ing
+router.put("/:ingredientId", upload.single("image"), updateIngredient); // update an ing
 module.exports = router;

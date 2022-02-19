@@ -73,52 +73,45 @@ exports.updateCaregory = async (req, res, next) => {
 
 exports.addRecipe = async (req, res, next) => {
   try {
-    let images = [];
     if (req.files) {
       req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
         req.originalUrl
-      }/${req.files[0].path}`;
+      }/${req.file.path}`;
       images = req.files;
     }
     req.body.category = req.category._id;
+
+    const arrayOfIng = req.body.ing.trim().split(",");
+    console.log(
+      "🚀 ~ file: controller.js ~ line 85 ~ exports.addRecipe= ~ req.body.ing.trim()",
+      req.body.ing.trim()
+    );
+    console.log(
+      "🚀 ~ file: controller.js ~ line 85 ~ exports.addRecipe= ~ arrayOfIng",
+      arrayOfIng
+    );
+
     const newRecipe = await Recipe.create(req.body);
     await Category.findByIdAndUpdate(req.category._id, {
       $push: { recipes: newRecipe._id },
     });
-    const newIngredienties = req.body.ing.split(",");
-    console.log(newIngredienties);
-    newIngredienties.forEach(async (ing, index) => {
-      const foundIng = await Ingredient.findOne({ name: ing });
-      if (foundIng) {
+
+    arrayOfIng.forEach(async (ing) => {
+      const ingredientFound = await Ingredient.findOne({ name: ing.trim() });
+      if (ingredientFound) {
+        // found ing
         await Recipe.findByIdAndUpdate(newRecipe._id, {
-          $push: { ingredients: foundIng._id },
+          $push: { ingredients: ingredientFound._id },
         });
-      } else {
-        const theIng = {
-          name: ing,
-          image: `${req.method} ${req.protocol}://${req.get("host")}${
-            req.originalUrl
-          }/${req.files[1 + index].path}`,
-        };
-        const createdIng = await Ingredient.create(theIng);
-        console.log(createdIng._id);
-        await Recipe.findByIdAndUpdate(newRecipe._id, {
-          $push: { ingredients: createdIng._id },
+
+        await Ingredient.findByIdAndUpdate(ingredientFound._id, {
+          $push: { recipes: newRecipe._id },
         });
       }
     });
+
     res.status(201).json(newRecipe);
   } catch (error) {
     next(error);
   }
-};
-
-exports.testingMultiImg = async (req, res, next) => {
-  if (req.file) {
-    req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
-      req.originalUrl
-    }/${req.file.path}`;
-  }
-  // console.log(req);
-  res.json(req.files);
 };

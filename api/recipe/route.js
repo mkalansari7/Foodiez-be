@@ -21,9 +21,8 @@ router.param("recipeId", async (req, res, next, recipeId) => {
   }
 });
 
-router.get("/", upload.single("image"), getRecipes);
-router.delete("/:recipeId", deleteRecipe);
-router.put("/:recipeId", upload.single("image"), updateRecipe);
-// router.post("/:recipeId/ingredient", upload.single("image"), addIngredient);
+router.get("/", getRecipes); // get all recipe
+router.delete("/:recipeId", deleteRecipe); //delete a recipe
+router.put("/:recipeId", upload.single("image"), updateRecipe); //update a recipe
 
 module.exports = router;
