@@ -7,6 +7,8 @@ const ingredientRoute = require("./api/ingredient/route");
 //
 const dotenv = require("dotenv");
 const connectDB = require("./database");
+const path = require("path");
+const e = require("cors");
 
 dotenv.config();
 const app = express();
@@ -24,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //routes
+app.use("/media", express.static(path.join(__dirname, "media")));
 app.use("/api/category", categoryRoute);
 app.use("/api/recipe", recipeRoute);
 app.use("/api/ingredient", ingredientRoute);

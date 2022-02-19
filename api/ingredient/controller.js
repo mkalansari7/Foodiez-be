@@ -36,9 +36,7 @@ exports.deleteIngredient = async (req, res, next) => {
 exports.updateIngredient = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
-        req.originalUrl
-      }/${req.file.path}`;
+      req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
     }
     const ingredient = await Ingredient.findByIdAndUpdate(
       { _id: req.ingredient.id },
@@ -54,9 +52,7 @@ exports.updateIngredient = async (req, res, next) => {
 exports.addIngredient = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
-        req.originalUrl
-      }/${req.file.path}`;
+      req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
     }
     const newIngredient = await Ingredient.create(req.body);
 

@@ -32,9 +32,7 @@ exports.getCategories = async (req, res, next) => {
 exports.addCategory = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
-        req.originalUrl
-      }/${req.file.path}`;
+      req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
     }
 
     const newCategory = await Category.create(req.body);
@@ -56,9 +54,7 @@ exports.deleteCategory = async (req, res, next) => {
 exports.updateCaregory = async (req, res, next) => {
   try {
     if (req.file) {
-      req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
-        req.originalUrl
-      }/${req.file.path}`;
+      req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
     }
     const category = await Category.findByIdAndUpdate(
       { _id: req.category.id },
@@ -74,9 +70,8 @@ exports.updateCaregory = async (req, res, next) => {
 exports.addRecipe = async (req, res, next) => {
   try {
     if (req.files) {
-      req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
-        req.originalUrl
-      }/${req.file.path}`;
+      req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
+
       images = req.files;
     }
     req.body.category = req.category._id;
