@@ -59,21 +59,3 @@ exports.updateRecipe = async (req, res, next) => {
     next(error);
   }
 };
-
-exports.addIngredient = async (req, res, next) => {
-  try {
-    if (req.file) {
-      req.body.image = `${req.method} ${req.protocol}://${req.get("host")}${
-        req.originalUrl
-      }/${req.file.path}`;
-    }
-    req.body.recipe = req.recipe._id;
-    const newIngredient = await Ingredient.create(req.body);
-    await Recipe.findByIdAndUpdate(req.body.recipe, {
-      $push: { ingredients: newIngredient._id },
-    });
-    res.status(201).json(newIngredient);
-  } catch (error) {
-    next(error);
-  }
-};

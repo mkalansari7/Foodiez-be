@@ -75,14 +75,41 @@ exports.addRecipe = async (req, res, next) => {
     req.body.category = req.category._id;
 
     const arrayOfIng = req.body.ing.trim().split(",");
-    console.log(
-      "🚀 ~ file: controller.js ~ line 85 ~ exports.addRecipe= ~ req.body.ing.trim()",
-      req.body.ing.trim()
-    );
-    console.log(
-      "🚀 ~ file: controller.js ~ line 85 ~ exports.addRecipe= ~ arrayOfIng",
-      arrayOfIng
-    );
+
+    const newRecipe = await Recipe.create(req.body);
+    await Category.findByIdAndUpdate(req.category._id, {
+      $push: { recipes: newRecipe._id },
+    });
+
+    arrayOfIng.forEach(async (ing) => {
+      const ingredientFound = await Ingredient.findOne({ name: ing.trim() });
+      if (ingredientFound) {
+        // found ing
+        await Recipe.findByIdAndUpdate(newRecipe._id, {
+          $push: { ingredients: ingredientFound._id },
+        });
+
+        await Ingredient.findByIdAndUpdate(ingredientFound._id, {
+          $push: { recipes: newRecipe._id },
+        });
+      }
+    });
+
+    res.status(201).json(newRecipe);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateRecipe = async (req, res, next) => {
+  try {
+    if (req.file) {
+      req.body.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
+    }
+    req.body.category = req.category._id;
+    const arrayOfIng = req.body.ing.trim().split(",");
+
+    await Recipe.findByIdAndDelete(req.params.recipeId);
 
     const newRecipe = await Recipe.create(req.body);
     await Category.findByIdAndUpdate(req.category._id, {
