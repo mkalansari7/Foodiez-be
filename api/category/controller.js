@@ -75,7 +75,7 @@ exports.addRecipe = async (req, res, next) => {
     req.body.category = req.category._id;
 
     const arrayOfIng = req.body.ing.trim().split(",");
-
+    console.log(arrayOfIng);
     const newRecipe = await Recipe.create(req.body);
     await Category.findByIdAndUpdate(req.category._id, {
       $push: { recipes: newRecipe._id },
@@ -83,6 +83,7 @@ exports.addRecipe = async (req, res, next) => {
 
     arrayOfIng.forEach(async (ing) => {
       const ingredientFound = await Ingredient.findOne({ name: ing.trim() });
+      console.log(ingredientFound);
       if (ingredientFound) {
         // found ing
         await Recipe.findByIdAndUpdate(newRecipe._id, {
@@ -108,7 +109,8 @@ exports.updateRecipe = async (req, res, next) => {
     }
     req.body.category = req.category._id;
     const arrayOfIng = req.body.ing.trim().split(",");
-
+    console.log(req.body.ing);
+    console.log(arrayOfIng);
     await Recipe.findByIdAndDelete(req.params.recipeId);
 
     const newRecipe = await Recipe.create(req.body);
@@ -118,6 +120,7 @@ exports.updateRecipe = async (req, res, next) => {
 
     arrayOfIng.forEach(async (ing) => {
       const ingredientFound = await Ingredient.findOne({ name: ing.trim() });
+      console.log(ingredientFound.name);
       if (ingredientFound) {
         // found ing
         await Recipe.findByIdAndUpdate(newRecipe._id, {
