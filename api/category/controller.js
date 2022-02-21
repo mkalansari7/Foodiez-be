@@ -83,7 +83,6 @@ exports.addRecipe = async (req, res, next) => {
 
     arrayOfIng.forEach(async (ing) => {
       const ingredientFound = await Ingredient.findOne({ name: ing.trim() });
-      console.log(ingredientFound);
       if (ingredientFound) {
         // found ing
         await Recipe.findByIdAndUpdate(newRecipe._id, {
@@ -120,7 +119,6 @@ exports.updateRecipe = async (req, res, next) => {
 
     arrayOfIng.forEach(async (ing) => {
       const ingredientFound = await Ingredient.findOne({ name: ing.trim() });
-      console.log(ingredientFound.name);
       if (ingredientFound) {
         // found ing
         await Recipe.findByIdAndUpdate(newRecipe._id, {
